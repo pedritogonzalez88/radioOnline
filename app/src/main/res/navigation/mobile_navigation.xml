@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_am">
+
+    <fragment
+        android:id="@+id/nav_am"
+        android:name="dev.pedrogonzalez.radioonline.ui.am.AmFragment"
+        android:label="@string/menu_am"
+        tools:layout="@layout/fragment_am" />
+    <fragment
+        android:id="@+id/nav_fm"
+        android:name="dev.pedrogonzalez.radioonline.ui.fm.FmFragment"
+        android:label="@string/menu_fm"
+        tools:layout="@layout/fragment_fm"/>
+
+    <fragment
+        android:id="@+id/nav_sanpedro"
+        android:name="dev.pedrogonzalez.radioonline.ui.sanpedro.SanPedroFragment"
+        android:label="@string/menu_sanpedro"
+        tools:layout="@layout/fragment_san_pedro"/>
+
+    <fragment
+        android:id="@+id/nav_pilar"
+        android:name="dev.pedrogonzalez.radioonline.ui.pilar.PilarFragment"
+        android:label="@string/menu_pilar"
+        tools:layout="@layout/fragment_pilar" />
+
+</navigation>

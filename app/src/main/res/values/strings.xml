@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Radio Nacional del Paraguay</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Radio Nacional del Paraguay</string>
+    <string name="nav_header_subtitle">www.radionacional.gov.py</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Configuracion</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_am">920 AM</string>
+    <string name="menu_fm">95.1 FM</string>
+    <string name="menu_sanpedro">105.9 FM</string>
+    <string name="menu_pilar">700 AM</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logo_san_pedro">logo_fm_san_pedro</string>
+    <string name="button_san_pedro">button_fm_san_pedro</string>
+</resources>

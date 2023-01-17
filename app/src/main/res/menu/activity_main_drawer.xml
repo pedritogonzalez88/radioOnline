@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_am"
+            android:icon="@drawable/ic_home"
+            android:title="@string/menu_am" />
+        <item
+            android:id="@+id/nav_fm"
+            android:icon="@drawable/ic_menu_fm"
+            android:title="@string/menu_fm" />
+        <item
+            android:id="@+id/nav_pilar"
+            android:icon="@drawable/ic_menu_920"
+            android:title="@string/menu_pilar" />
+        <item
+            android:id="@+id/nav_sanpedro"
+            android:icon="@drawable/ic_menu_fm"
+            android:title="@string/menu_sanpedro" />
+    </group>
+</menu>
