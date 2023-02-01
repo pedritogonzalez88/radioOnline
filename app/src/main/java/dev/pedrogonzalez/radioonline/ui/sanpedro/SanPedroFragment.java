@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,33 +27,40 @@ public class SanPedroFragment extends Fragment {
 
         View vista = inflater.inflate(R.layout.fragment_san_pedro, container, false);
 
-        mPlayer = new MediaPlayer();
+
         playPause = vista.findViewById(R.id.playpause);
+
+        initializeMediaPlayer();
+        prepareMediaSanPedro();
+
+        return vista;
+    }
+    private void initializeMediaPlayer() {
+        mPlayer = new MediaPlayer();
+        playPause.findViewById(R.id.playpause);
 
         playPause.setOnClickListener(view -> {
             if (mPlayer.isPlaying())
             {
-                mPlayer.stop();
+                mPlayer.pause();
                 playPause.setImageResource(R.drawable.ic_play);
             }else {
                 mPlayer.start();
                 playPause.setImageResource(R.drawable.ic_pause);
             }
         });
-        prepareMediaSanPedro();
-
-        return vista;
     }
 
     public void prepareMediaSanPedro(){
         try {
+            mPlayer.reset();
             mPlayer.setDataSource("http://201.217.50.222:8084/sanpedro");
             mPlayer.setVolume(85,100);
-            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mPlayer.start();
-                }
+            mPlayer.setOnPreparedListener(MediaPlayer::start);
+            mPlayer.setOnBufferingUpdateListener((mp, percent) -> {
+                double ratio = percent / 100.0;
+                int bufferingLevel = (int)(mp.getDuration() * ratio);
+                Log.i("buffering", "Upload Streaming" + bufferingLevel);
             });
             mPlayer.prepareAsync();
         }catch (Exception ex)

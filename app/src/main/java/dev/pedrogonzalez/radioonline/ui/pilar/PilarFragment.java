@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,30 +26,43 @@ public class PilarFragment extends Fragment {
                              Bundle savedInstanceState) {
         onCreate(savedInstanceState);
         View vista =  inflater.inflate(R.layout.fragment_pilar, container, false);
-        mPlayer = new MediaPlayer();
+
         playPause = vista.findViewById(R.id.playpause);
+
+        initializeMediaPlayer();
+        prepareMediaPilar();
+
+        return vista;
+    }
+
+    private void initializeMediaPlayer(){
+        mPlayer = new MediaPlayer();
+        playPause.findViewById(R.id.playpause);
 
         playPause.setOnClickListener(view -> {
             if (mPlayer.isPlaying())
             {
-                mPlayer.stop();
+                mPlayer.pause();
                 playPause.setImageResource(R.drawable.ic_play);
             }else {
                 mPlayer.start();
                 playPause.setImageResource(R.drawable.ic_pause);
             }
         });
-        prepareMediaPilar();
-
-        return vista;
     }
 
     public void prepareMediaPilar(){
         try {
+            mPlayer.reset();
             mPlayer.setDataSource("http://201.217.50.222:8085/700am");
             mPlayer.setVolume(85,100);
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mPlayer.setOnPreparedListener(MediaPlayer::start);
+            mPlayer.setOnBufferingUpdateListener((mp, percent) -> {
+                double ratio = percent / 100.0;
+                int bufferingLevel = (int)(mp.getDuration() * ratio);
+                Log.i("buffering", "Upload Streaming" + bufferingLevel);
+            });
             mPlayer.prepareAsync();
         }catch (Exception ex)
         {
