@@ -12,26 +12,36 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+
 import dev.pedrogonzalez.radioonline.R;
 
 public class PilarFragment extends Fragment {
 
     private MediaPlayer mPlayer;
     private ImageButton playPause;
-    boolean isBuffering = false;
+    private boolean isBuffering = false;
+    private static final int RECONNECT_DELAY = 5000; // 5 seconds delay for reconnection
+    private static final String STREAM_URL = "http://audio.radionacional.gov.py/700am";
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.fragment_pilar, container, false);
 
         playPause = vista.findViewById(R.id.playpause);
+
+        configureCookieManager();  // Configurar el CookieManager antes de cualquier solicitud HTTP
         initializeMediaPlayer();
         prepareMediaPilar();
 
         return vista;
     }
 
-    private void initializeMediaPlayer(){
+    private void initializeMediaPlayer() {
         mPlayer = new MediaPlayer();
 
         playPause.setOnClickListener(view -> {
@@ -45,10 +55,22 @@ public class PilarFragment extends Fragment {
         });
     }
 
+    private void configureCookieManager() {
+        // Configurar un CookieManager si no existe uno
+        if (CookieHandler.getDefault() == null) {
+            CookieManager cookieManager = new CookieManager();
+            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+            CookieHandler.setDefault(cookieManager);
+            Log.i("CookieHandler", "CookieManager configured.");
+        } else {
+            Log.i("CookieHandler", "Existing CookieHandler: " + CookieHandler.getDefault().toString());
+        }
+    }
+
     public void prepareMediaPilar() {
         try {
             mPlayer.reset();
-            mPlayer.setDataSource("http://audio.radionacional.gov.py/920");
+            mPlayer.setDataSource(STREAM_URL);
             mPlayer.setVolume(0.85f, 1.0f);
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -69,7 +91,7 @@ public class PilarFragment extends Fragment {
 
             mPlayer.setOnErrorListener((mp, what, extra) -> {
                 Log.e("MediaPlayer Error", "Error: " + what + ", " + extra);
-                playPause.setImageResource(R.drawable.ic_play);
+                handleConnectionError();
                 return true;
             });
 
@@ -79,10 +101,31 @@ public class PilarFragment extends Fragment {
             });
 
             mPlayer.prepareAsync();
-        } catch (Exception ex) {
-            Log.e("MediaPlayer Error", "Error preparing MediaPlayer", ex);
+        } catch (IOException ex) {
+            Log.e("MediaPlayer Error", "IOException preparing MediaPlayer", ex);
+            playPause.setImageResource(R.drawable.ic_play);
+        } catch (IllegalArgumentException ex) {
+            Log.e("MediaPlayer Error", "IllegalArgumentException preparing MediaPlayer", ex);
+            playPause.setImageResource(R.drawable.ic_play);
+        } catch (SecurityException ex) {
+            Log.e("MediaPlayer Error", "SecurityException preparing MediaPlayer", ex);
+            playPause.setImageResource(R.drawable.ic_play);
+        } catch (IllegalStateException ex) {
+            Log.e("MediaPlayer Error", "IllegalStateException preparing MediaPlayer", ex);
             playPause.setImageResource(R.drawable.ic_play);
         }
+    }
+
+    private void handleConnectionError() {
+        // Mostrar el icono de reproducción
+        playPause.setImageResource(R.drawable.ic_play);
+
+        // Esperar unos segundos antes de intentar reconectar
+        playPause.postDelayed(() -> {
+            if (!mPlayer.isPlaying()) {
+                prepareMediaPilar();
+            }
+        }, RECONNECT_DELAY);
     }
 
     @Override
