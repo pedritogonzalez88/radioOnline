@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="500dp"
             android:background="@color/purple_900"
+            android:contentDescription="@string/desc_content"
             android:src="@drawable/ic_logo_am" />
     </LinearLayout>
 
@@ -26,6 +27,7 @@
         android:layout_height="240dp"
         android:layout_gravity="bottom"
         android:background="@color/white"
+        android:contentDescription="@string/desc_content_play"
         android:src="@drawable/ic_play" />
 
 </FrameLayout>

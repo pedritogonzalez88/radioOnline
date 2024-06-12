@@ -16,4 +16,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logo_san_pedro">logo_fm_san_pedro</string>
     <string name="button_san_pedro">button_fm_san_pedro</string>
+    <string name="desc_content">Imagen de Logo para Am 920</string>
+    <string name="desc_content_play">icono de play</string>
 </resources>
